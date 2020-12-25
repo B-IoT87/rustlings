@@ -11,7 +11,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
@@ -26,6 +25,12 @@ struct Color {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (x, y, z) = tuple; // Just give it a name
+        
+        match (x, y, z) {
+            (0..=255, 0..=255, 0..=255) => Ok(Color{red: x as u8, green: y as u8, blue: z as u8}),
+            _ => Err(String::from("Invalid Values"))
+        }
     }
 }
 
@@ -33,6 +38,7 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        Color::try_from((arr[0], arr[1], arr[2])) // It is the same logic as with a tuple, so why don't just make a tuple and use the previous implementation?
     }
 }
 
@@ -40,6 +46,12 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = String;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        // We can just check the length and use again the tuple implementation
+        if slice.len() != 3 {
+            Err(String::from("Invalid Amount of Values"))
+        } else {
+            Color::try_from((slice[0], slice[1], slice[2]))
+        }
     }
 }
 
